@@ -20,11 +20,13 @@ The Usefull Functions
 
     2-> bloginfo('template_directory') -> This function is use for getting the path of your theme folder this function is use without echo
 
-    3-> get_header() -> This function is use for getting the header.php file from your theme folder in your index.php file
+    3-> get_header() -> This function is use for getting the header.php file from your theme folder in your index.php file.
 
-    4-> get_footer() -> This function is use for getting the footer.php file from your theme folder in your index.php file
+    4-> get_footer() -> This function is use for getting the footer.php file from your theme folder in your index.php file.
 
-    5-> get_sidebar() -> This function is use for getting the sidebar.php file from your theme folder in your index.php file
+    5-> get_sidebar() -> This function is use for getting the sidebar.php file from your theme folder in your index.php file.
+
+    6-> site_url() -> This function is use for getting the website url.
 
 Note: Create header.php and footer.php file and use get_header() and get_footer() in index.php for include header and footer
 
@@ -73,5 +75,10 @@ Topic 4
 	Note: if you use this function for showing image in front side so you don't use img tag.
 	
 	3-> wp_get_attachment_image_src( get_post_thumbnail_id(), 'large'); //This Function is getting the path of image
+Topic 5
+	How to add logo in the header 
+	1-> use add_theme_support('custom-header') function in functions.php for getting header option in admin side
+
+	2-> get_header_image() use this function for showing logo image, This function is return the path of the logo image
    
    
