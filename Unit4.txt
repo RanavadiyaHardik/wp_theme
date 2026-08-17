@@ -80,5 +80,36 @@ Topic 5
 	1-> use add_theme_support('custom-header') function in functions.php for getting header option in admin side
 
 	2-> get_header_image() use this function for showing logo image, This function is return the path of the logo image
+
+Topic 5
+	How To Create Custom Template
+	1-> create any php file like template-contact.php (template is not a fix word you can use as you wish)
+
+	2-> write the comment in the page //Template Name: Your-Template-Name and the template option is showing in admin side page editing and creating
+		Ex. <?php
+				//Template Name: Contact Us
+			?>
+
+Topic 6
+	How to show posts in front side
+	1-> create a page like blog 
+
+	2-> navigate to settings->reading and select post page (The post page is loads by default index.php)
+
+	3-> use while loop and in the while loop use have_posts() and after loop started write the_post(); for counting post
+		Ex. <?php
+				while(have_posts()){
+					the_post();
+			?>
+				Your HTML Design
+			<?php } ?>
+
+	4-> Usefull Functions 
+		(1) the_title() -> for showing title of the post;
+		(2) wp_get_attachment_image_src(get_post_thumbnail_id(),image size) -> for showing post image;
+		(3) the_post_thumbnail() -> for showing post image same as wp_get_attachment_image_src;
+		(4) the_date() -> for showing post created date;
+		(5) get_the_date() -> for showing post created date but it's uses echo;
+		(6) the_excerpt() -> for showing short description of the post;
    
    
