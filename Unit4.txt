@@ -111,5 +111,26 @@ Topic 6
 		(4) the_date() -> for showing post created date;
 		(5) get_the_date() -> for showing post created date but it's uses echo;
 		(6) the_excerpt() -> for showing short description of the post;
+
+Topic 7
+	How to add pagination to blogs
+	(1) Set minimum blogs showing from settings->reading;
+	(2) Install WpPagenavi plugin;
+	(3) use wp_pagenavi() for showing pagination and use echo before function;
+	(4) add wp_head() function in header.php and add wp_footer() function in footer.php for plugin's css and js;
+
+Topic 8
+	How to show post details 
+	(1) Create a single.php file on your theme folder (The single.php file is showing the post's content and details);
+	(2) fist you add a button or a link like read more in your post's card use the_permalink() function for getting the link of your post
+	(3) in the single.php you can use same functions as the page like Note: use the_post() in the upper side of single.php
+		ex.
+			the_title() -> for showing post title;
+			the_content() -> for showing the post content;
+			wp_get_attachment_image_src(get_post_thumbnail_id(),size) -> for showing post featured image;
+			the_date() or get_the_date() -> for showing date of post;
+			the_author() -> for showing th eauthor of post;
+
+			
    
    
