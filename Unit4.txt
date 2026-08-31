@@ -1,136 +1,746 @@
-How To Create A Custome Theme In Wordpress
+HOW TO CREATE A CUSTOM THEME IN WORDPRESS
 
-1) Create A Folder In Xampp/htdocs/Your Wordpress Folder/wp-content/themes/
-2) Create Two Files In Your Folder named 
-   i) style.css  (For Style)
-   ii) index.php  (For Home Page)
-3) Add below code in style.css file
-   /*
-   Theme Name: My Theme
-   Author: BCA Sem 3
-   Description: Twenty Twenty-Three is designed to take advantage of the new design tools introduced in WordPress 6.1. With a clean, blank base as a starting point, this default theme includes ten diverse style variations created by members of the WordPress community. Whether you want to build a complex or incredibly simple website, you can do it quickly and intuitively through the bundled styles or dive into creation and full customization yourself.
-   Version: 1.0
-   */
+==================================================
+TOPIC 1: HOW TO CREATE A CUSTOM THEME
+=====================================
 
-4) Add Any Theme Code In index.php
+1. Create a Folder
 
+Create a new folder inside:
 
-The Usefull Functions 
-    1-> echo get_template_directory_uri() -> This function is use for getting the path of your theme folder
+xampp/htdocs/Your-WordPress-Folder/wp-content/themes/
 
-    2-> bloginfo('template_directory') -> This function is use for getting the path of your theme folder this function is use without echo
+Example:
+mytheme
 
-    3-> get_header() -> This function is use for getting the header.php file from your theme folder in your index.php file.
+2. Create Two Files
 
-    4-> get_footer() -> This function is use for getting the footer.php file from your theme folder in your index.php file.
+Create these two files inside your theme folder:
 
-    5-> get_sidebar() -> This function is use for getting the sidebar.php file from your theme folder in your index.php file.
+i) style.css
+Use: For theme information and CSS styling.
 
-    6-> site_url() -> This function is use for getting the website url.
+ii) index.php
+Use: Main/default template file of the theme.
 
-Note: Create header.php and footer.php file and use get_header() and get_footer() in index.php for include header and footer
+3. Add Theme Information in style.css
 
-Topic 2
-   How To Make Header Menu Dynamic
+/*
+Theme Name: My Theme
+Author: BCA Sem 3
+Description: My Custom WordPress Theme
+Version: 1.0
+*/
 
-   1-> Create A functions.php file and use register_nav_menus() function for creating menu 
-         Ex.   register_nav_menus(
-                  array('primary-menu' => 'Header Menu') // You Must Pass The Array Key And Value The Value Is Shows In Admin Side
-               );
-   
-   2-> The Menus Option Is Available In Admin Dashboard Click And Create And Edit Menu
+4. Add Theme Code
 
-   3-> Use wp_nav_menu() function for showing menu in front side in header.php
-         Ex.   <?php
-                  wp_nav_menu(array('theme_location' => 'primary-menu', 'menu_class' => 'menu')); //must pass the array 
-               ?>
-   
-   4-> You Can Design Your Menu As You Need By Their Class Name Ex. ".menu" The Menu Is Provide <ul> <li>format
+Add your HTML/PHP theme code inside index.php.
 
+## USEFUL FUNCTIONS
 
-Topic 3
-   How To Create Custom Page layout And Show Pages Dynamically
+1. echo get_template_directory_uri();
 
-   1-> Create A page.php file all pages use this file 
+Use:
+Returns the URL/path of the current theme directory.
 
-   2-> use get_header() and get_footer() for including header and footer 
+Example:
+echo get_template_directory_uri();
 
-   3-> use the_title() function for getting the title of the Page
+2. bloginfo('template_directory');
 
-   4-> use the_content() function for showing content of the page OR if it's not working use the_post() in the top of the page.php
+Use:
+Displays the URL/path of the current theme directory.
 
-   5-> you can use get_the_content() function for showing the page content also but the function use echo before the function 
-         Ex. echo get_the_content();
+3. get_header();
 
-Topic 4
-	How to add thumnail image or featured image in page
-	1-> use add_theme_support('post-thumbnails') function in functions.php for getting image option in admin side
+Use:
+Includes the header.php file in the current template.
 
-	2-> the_post_thumbnail(); // Without parameter ->; Thumbnail
-	    the_post_thumbnail('thumbnail'); // Thumbnail (default 150px x 150px max)
-            the_post_thumbnail('medium'); // Medium resolution (default 300px x 300px max)
-            the_post_thumbnail('large'); // Large resolution (default 1024px x 1024px max)
-            the_post_thumbnail('full'); // Original image resolution (unmodified)
-            the_post_thumbnail(array( 100, 100 )); // Other resolutions (height, width) 
-	Note: if you use this function for showing image in front side so you don't use img tag.
-	
-	3-> wp_get_attachment_image_src( get_post_thumbnail_id(), 'large'); //This Function is getting the path of image
-Topic 5
-	How to add logo in the header 
-	1-> use add_theme_support('custom-header') function in functions.php for getting header option in admin side
+Example:
 
-	2-> get_header_image() use this function for showing logo image, This function is return the path of the logo image
+<?php get_header(); ?>
 
-Topic 5
-	How To Create Custom Template
-	1-> create any php file like template-contact.php (template is not a fix word you can use as you wish)
+4. get_footer();
 
-	2-> write the comment in the page //Template Name: Your-Template-Name and the template option is showing in admin side page editing and creating
-		Ex. <?php
-				//Template Name: Contact Us
-			?>
+Use:
+Includes the footer.php file in the current template.
 
-Topic 6
-	How to show posts in front side
-	1-> create a page like blog 
+Example:
 
-	2-> navigate to settings->reading and select post page (The post page is loads by default index.php)
+<?php get_footer(); ?>
 
-	3-> use while loop and in the while loop use have_posts() and after loop started write the_post(); for counting post
-		Ex. <?php
-				while(have_posts()){
-					the_post();
-			?>
-				Your HTML Design
-			<?php } ?>
+5. get_sidebar();
 
-	4-> Usefull Functions 
-		(1) the_title() -> for showing title of the post;
-		(2) wp_get_attachment_image_src(get_post_thumbnail_id(),image size) -> for showing post image;
-		(3) the_post_thumbnail() -> for showing post image same as wp_get_attachment_image_src;
-		(4) the_date() -> for showing post created date;
-		(5) get_the_date() -> for showing post created date but it's uses echo;
-		(6) the_excerpt() -> for showing short description of the post;
+Use:
+Includes the sidebar.php file in the current template.
 
-Topic 7
-	How to add pagination to blogs
-	(1) Set minimum blogs showing from settings->reading;
-	(2) Install WpPagenavi plugin;
-	(3) use wp_pagenavi() for showing pagination and use echo before function;
-	(4) add wp_head() function in header.php and add wp_footer() function in footer.php for plugin's css and js;
+Example:
 
-Topic 8
-	How to show post details 
-	(1) Create a single.php file on your theme folder (The single.php file is showing the post's content and details);
-	(2) fist you add a button or a link like read more in your post's card use the_permalink() function for getting the link of your post
-	(3) in the single.php you can use same functions as the page like Note: use the_post() in the upper side of single.php
-		ex.
-			the_title() -> for showing post title;
-			the_content() -> for showing the post content;
-			wp_get_attachment_image_src(get_post_thumbnail_id(),size) -> for showing post featured image;
-			the_date() or get_the_date() -> for showing date of post;
-			the_author() -> for showing th eauthor of post;
+<?php get_sidebar(); ?>
 
-			
-   
-   
+6. site_url();
+
+Use:
+Returns the URL of the WordPress website.
+
+Example:
+echo site_url();
+
+NOTE:
+Create header.php and footer.php files in your theme folder.
+
+Use get_header() and get_footer() in index.php to include them.
+
+Example:
+
+<?php get_header(); ?>
+
+<!-- Page Content -->
+
+<?php get_footer(); ?>
+
+==================================================
+TOPIC 2: HOW TO MAKE HEADER MENU DYNAMIC
+========================================
+
+1. Create functions.php
+
+Create a functions.php file in your theme folder.
+
+Use register_nav_menus() to register a menu location.
+
+Example:
+
+register_nav_menus(
+array(
+'primary-menu' => 'Header Menu'
+)
+);
+
+Note:
+The array key is the menu location.
+The value is displayed in the WordPress Admin Dashboard.
+
+2. Create Menu from Admin Dashboard
+
+Go to:
+
+WordPress Admin Dashboard -> Appearance -> Menus
+
+Create and edit your menu.
+
+3. Display Menu in header.php
+
+Use wp_nav_menu():
+
+<?php
+wp_nav_menu(
+    array(
+        'theme_location' => 'primary-menu',
+        'menu_class' => 'menu'
+    )
+);
+?>
+
+4. Design the Menu
+
+wp_nav_menu() generally generates <ul> and <li> elements.
+
+You can design the menu using CSS.
+
+Example:
+
+.menu {
+/* Your CSS */
+}
+
+==================================================
+TOPIC 3: HOW TO CREATE CUSTOM PAGE LAYOUT
+AND SHOW PAGES DYNAMICALLY
+==========================
+
+1. Create page.php
+
+Create a page.php file in your theme folder.
+
+WordPress uses this template for displaying pages.
+
+2. Include Header and Footer
+
+<?php get_header(); ?>
+
+<!-- Page Content -->
+
+<?php get_footer(); ?>
+
+3. Display Page Title
+
+Use:
+
+<?php the_title(); ?>
+
+Use:
+Displays the title of the current page.
+
+4. Display Page Content
+
+Use:
+
+<?php the_content(); ?>
+
+Use:
+Displays the content of the current page.
+
+If required, use the_post() before displaying page data:
+
+<?php
+the_post();
+the_title();
+the_content();
+?>
+
+5. get_the_content()
+
+Use:
+
+<?php echo get_the_content(); ?>
+
+Use:
+Returns the content of the current post or page.
+
+Note:
+get_the_content() returns the content, so echo is generally used.
+
+==================================================
+TOPIC 4: HOW TO ADD FEATURED IMAGE / THUMBNAIL
+==============================================
+
+1. Enable Featured Image
+
+Add this in functions.php:
+
+add_theme_support('post-thumbnails');
+
+Use:
+Enables the Featured Image option in the WordPress Admin Dashboard.
+
+2. Display Featured Image
+
+Use:
+
+<?php the_post_thumbnail(); ?>
+
+You can specify image sizes:
+
+the_post_thumbnail('thumbnail');
+the_post_thumbnail('medium');
+the_post_thumbnail('large');
+the_post_thumbnail('full');
+
+Image Sizes:
+
+thumbnail
+Use: Default thumbnail size, normally 150 x 150.
+
+medium
+Use: Medium image size, normally 300 x 300.
+
+large
+Use: Large image size, normally 1024 x 1024.
+
+full
+Use: Original image resolution.
+
+Custom Image Size:
+
+<?php the_post_thumbnail(array(100, 100)); ?>
+
+Use:
+Displays the featured image with custom dimensions.
+
+NOTE:
+When using the_post_thumbnail(), you do not need to manually use an <img> tag.
+
+3. Get Featured Image URL
+
+Use:
+
+<?php
+$image = wp_get_attachment_image_src(
+    get_post_thumbnail_id(),
+    'large'
+);
+?>
+
+Use:
+Gets information about the featured image, including its URL and dimensions.
+
+==================================================
+TOPIC 5: HOW TO ADD LOGO IN THE HEADER
+======================================
+
+1. Enable Custom Header
+
+Add this in functions.php:
+
+add_theme_support('custom-header');
+
+Use:
+Enables the Header option in the WordPress Admin Dashboard.
+
+2. Get Header Image
+
+Use:
+
+<?php echo get_header_image(); ?>
+
+Use:
+Returns the URL of the selected custom header image.
+
+==================================================
+TOPIC 6: HOW TO CREATE A CUSTOM TEMPLATE
+========================================
+
+1. Create a PHP File
+
+Create any PHP file in your theme folder.
+
+Example:
+
+template-contact.php
+
+Note:
+The filename does not have to contain the word "template".
+
+2. Add Template Name
+
+At the top of the file:
+
+<?php
+/*
+Template Name: Contact Us
+*/
+?>
+
+After adding this code, the "Contact Us" template will appear in the Page Template option while creating or editing a page.
+
+==================================================
+TOPIC 7: HOW TO SHOW POSTS ON THE FRONT SIDE
+============================================
+
+1. Create a Blog Page
+
+Create a page such as:
+
+Blog
+
+2. Set Posts Page
+
+Go to:
+
+Settings -> Reading
+
+Select the Blog page as the Posts Page.
+
+WordPress will use the appropriate blog/archive template.
+If a more specific template is not available, index.php may be used.
+
+3. Use the WordPress Loop
+
+The WordPress Loop is used to display posts dynamically.
+
+Example:
+
+<?php
+while (have_posts()) {
+    the_post();
+?>
+
+```
+<!-- Your HTML Design -->
+```
+
+<?php
+}
+?>
+
+## USEFUL FUNCTIONS
+
+1. the_title()
+
+Use:
+Displays the title of the current post.
+
+2. the_post_thumbnail()
+
+Use:
+Displays the featured image of the current post.
+
+3. wp_get_attachment_image_src()
+
+Use:
+Gets information about the featured image, including its URL and dimensions.
+
+4. the_date()
+
+Use:
+Displays the publication date of the current post.
+
+5. get_the_date()
+
+Use:
+Returns the publication date of the current post.
+
+Example:
+
+<?php echo get_the_date(); ?>
+
+6. the_excerpt()
+
+Use:
+Displays the excerpt or short description of the current post.
+
+7. the_permalink()
+
+Use:
+Displays the URL/permalink of the current post.
+
+==================================================
+TOPIC 8: HOW TO ADD PAGINATION TO BLOG
+======================================
+
+1. Set Number of Posts
+
+Go to:
+
+Settings -> Reading
+
+Set the number of posts that should be displayed per page.
+
+2. Install WP-PageNavi Plugin
+
+Install and activate the WP-PageNavi plugin.
+
+3. Display Pagination
+
+Use:
+
+<?php wp_pagenavi(); ?>
+
+Use:
+Displays pagination for posts when using the WP-PageNavi plugin.
+
+4. Add WordPress Header and Footer Hooks
+
+Add this inside header.php before </head>:
+
+<?php wp_head(); ?>
+
+Add this inside footer.php before </body>:
+
+<?php wp_footer(); ?>
+
+Use of wp_head():
+Outputs scripts, styles, metadata, and other required content in the <head> section.
+
+Use of wp_footer():
+Outputs scripts and other required content before the closing </body> tag.
+
+These hooks allow WordPress and plugins to load their required CSS, JavaScript, and other resources.
+
+==================================================
+TOPIC 9: HOW TO SHOW POST DETAILS
+=================================
+
+1. Create single.php
+
+Create:
+
+single.php
+
+Use:
+The single.php file is used to display an individual blog post.
+
+2. Add Read More Link
+
+In the post listing/card, use:
+
+<a href="<?php the_permalink(); ?>">
+    Read More
+</a>
+
+Use:
+the_permalink() gets the URL of the current post.
+
+3. Display Post Details
+
+Example:
+
+<?php
+while (have_posts()) {
+    the_post();
+?>
+
+<h1><?php the_title(); ?></h1>
+
+<?php the_content(); ?>
+
+<?php
+}
+?>
+
+## USEFUL FUNCTIONS
+
+1. the_title()
+
+Use:
+Displays the title of the current post.
+
+2. the_content()
+
+Use:
+Displays the complete content of the current post.
+
+3. the_post_thumbnail()
+
+Use:
+Displays the featured image of the current post.
+
+4. wp_get_attachment_image_src()
+
+Use:
+Gets information about the featured image.
+
+5. the_date()
+
+Use:
+Displays the publication date of the current post.
+
+6. get_the_date()
+
+Use:
+Returns the publication date of the current post.
+
+7. the_author()
+
+Use:
+Displays the name of the author of the current post.
+
+==================================================
+TOPIC 10: HOW TO SHOW COMMENT FORM ON BLOG DETAIL PAGE
+======================================================
+
+1. Display Comment Form
+
+Use:
+
+<?php comment_form(); ?>
+
+Use:
+Displays the WordPress comment submission form.
+
+2. Display Comments
+
+Use:
+
+<?php wp_list_comments(); ?>
+
+wp_list_comments([
+    'style'              => 'ol',
+    'avatar_size'        => 50,
+    'short_ping'         => true,
+    'type'               => 'all',
+    'reverse_top_level'  => false,
+    'reverse_children'   => false,
+    'callback'           => 'my_custom_comment',
+]);
+
+| Argument            | Use                                                                                                |
+| ------------------- | -------------------------------------------------------------------------------------------------- |
+| `style`             | Defines the HTML structure used to display comments. Values can be `ol`, `ul`, or `div`.           |
+| `avatar_size`       | Sets the size of the comment author's avatar in pixels.                                            |
+| `short_ping`        | Displays pingbacks in a shorter format when set to `true`.                                         |
+| `type`              | Specifies which type of comments to display, such as `all`, `comment`, `pingback`, or `trackback`. |
+| `reverse_top_level` | Reverses the order of top-level comments when set to `true`.                                       |
+| `reverse_children`  | Reverses the order of replies/child comments when set to `true`.                                   |
+| `callback`          | Allows you to create a custom function to control the HTML/design of each comment.                 |
+| `end-callback`      | Allows you to run a custom function after each comment's children/replies have been displayed.     |
+| `page`              | Specifies the page number of comments to display.                                                  |
+| `per_page`          | Specifies how many comments should be displayed per page.                                          |
+| `max_depth`         | Sets the maximum depth/level of nested comments and replies.                                       |
+
+function my_custom_comment($comment, $args, $depth)
+{
+    ?>
+    
+    <li class="custom-comment">
+
+        <h4>
+            <?php echo get_comment_author(); ?>
+        </h4>
+
+        <p>
+            <?php comment_text(); ?>
+        </p>
+
+        <small>
+            <?php comment_date(); ?>
+        </small>
+
+    </li>
+
+    <?php
+}
+
+wp_list_comments([
+    'callback' => 'my_custom_comment'
+]);
+
+Use:
+Displays the comments and replies for the current post.
+
+3. Display Comments and Comment Form Together
+
+Use:
+
+<?php comments_template(); ?>
+
+Use:
+Loads the theme's comments.php file to display comments and the comment form.
+
+If you use comments_template() in single.php, you normally do not need to separately call comment_form() there.
+
+Example of comments.php:
+
+<?php
+wp_list_comments();
+comment_form();
+?>
+
+==================================================
+IMPORTANT WORDPRESS TEMPLATE FILES
+==================================
+
+style.css
+Use: Contains theme information and CSS styling.
+
+index.php
+Use: Default/fallback template file.
+
+header.php
+Use: Contains the website header.
+
+footer.php
+Use: Contains the website footer.
+
+sidebar.php
+Use: Contains the website sidebar.
+
+functions.php
+Use: Contains theme functions and enables theme features.
+
+page.php
+Use: Displays pages.
+
+single.php
+Use: Displays individual blog posts.
+
+comments.php
+Use: Displays the comments section.
+
+archive.php
+Use: Displays archive pages.
+
+search.php
+Use: Displays search results.
+
+404.php
+Use: Displays the 404 error page.
+
+==================================================
+IMPORTANT WORDPRESS FUNCTIONS
+=============================
+
+1. get_header()
+   Use: Includes the header.php file in the current template.
+
+2. get_footer()
+   Use: Includes the footer.php file in the current template.
+
+3. get_sidebar()
+   Use: Includes the sidebar.php file in the current template.
+
+4. the_title()
+   Use: Displays the title of the current post or page.
+
+5. the_content()
+   Use: Displays the content of the current post or page.
+
+6. the_excerpt()
+   Use: Displays the excerpt or short description of the current post.
+
+7. the_post()
+   Use: Sets up the current post data inside the WordPress Loop.
+
+8. have_posts()
+   Use: Checks whether there are any posts available to display in the Loop.
+
+9. the_permalink()
+   Use: Displays the URL/permalink of the current post.
+
+10. the_post_thumbnail()
+    Use: Displays the featured image of the current post.
+
+11. get_the_date()
+    Use: Returns the publication date of the current post.
+
+12. the_date()
+    Use: Displays the publication date of the current post.
+
+13. the_author()
+    Use: Displays the name of the author of the current post.
+
+14. wp_nav_menu()
+    Use: Displays a registered navigation menu on the front end.
+
+15. register_nav_menus()
+    Use: Registers one or more navigation menu locations for the theme.
+
+16. add_theme_support()
+    Use: Enables specific WordPress features in the theme, such as featured images and custom headers.
+
+17. wp_list_comments()
+    Use: Displays the comments and replies for the current post.
+
+18. comment_form()
+    Use: Displays the WordPress comment submission form.
+
+19. comments_template()
+    Use: Loads the theme's comments.php file to display comments and the comment form.
+
+20. site_url()
+    Use: Returns the URL of the WordPress website.
+
+21. get_template_directory_uri()
+    Use: Returns the URL of the current theme directory.
+
+22. bloginfo('template_directory')
+    Use: Displays the URL of the current theme directory.
+
+23. wp_head()
+    Use: Outputs scripts, styles, metadata, and other content in the <head> section.
+
+24. wp_footer()
+    Use: Outputs scripts and other required content before the closing </body> tag.
+
+25. get_header_image()
+    Use: Returns the URL of the custom header image.
+
+26. wp_get_attachment_image_src()
+    Use: Returns information about an image attachment, including its URL and dimensions.
+
+27. get_post_thumbnail_id()
+    Use: Returns the attachment ID of the current post's featured image.
+
+28. wp_pagenavi()
+    Use: Displays pagination for posts when using the WP-PageNavi plugin.
