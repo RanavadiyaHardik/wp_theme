@@ -618,6 +618,28 @@ comment_form();
 ?>
 
 ==================================================
+TOPIC 11: HOW TO SHOW POSTS BY THEIR CATEGORY
+======================================================
+
+1. Create category.php file for showing posts by category and add same code of index.php or home.php
+
+==================================================
+TOPIC 12: HOW TO CREATE YOUR CUSTOM WIDGET OR SIDEBAR
+======================================================
+
+1. use register_sidebar() function in functions.php for getting widgets option in admin panel;
+    ex.  register_sidebar(
+            array(
+                'name'=>"Your Area Name",
+                'id' => "sidebar",
+                'description'=> "It's Optional"
+            )
+        );
+
+2. use dynamic_sidebar('your sidebar id') function for your widgets in front side
+        
+
+==================================================
 IMPORTANT WORDPRESS TEMPLATE FILES
 ==================================
 
