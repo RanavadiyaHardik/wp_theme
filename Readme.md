@@ -22,9 +22,10 @@ A step-by-step guide to building a custom WordPress theme from scratch — dynam
 | 10 | [Comment Form on Blog Detail Page](#-topic-10--comment-form-on-blog-detail-page) |
 | 11 | [Showing Posts by Category](#-topic-11--showing-posts-by-category) |
 | 12 | [Creating a Custom Widget / Sidebar](#-topic-12--creating-a-custom-widget--sidebar) |
-| 13 | [Final Theme File Structure](#-final-theme-file-structure) |
-| 14 | [Quick Revision Table](#-quick-revision-table-all-important-functions) |
-| 15 | [Practical Task](#-practical-task-college-website-theme) |
+| 13 | [Calling a Sidebar from Any Template File](#-topic-13--calling-a-sidebar-from-any-template-file) |
+| 14 | [Final Theme File Structure](#-final-theme-file-structure) |
+| 15 | [Quick Revision Table](#-quick-revision-table-all-important-functions) |
+| 16 | [Practical Task](#-practical-task-college-website-theme) |
 
 ---
 
@@ -719,6 +720,89 @@ Use `dynamic_sidebar('your sidebar id')` wherever you want the widgets to appear
 
 ---
 
+## 🔌 Topic 13 — Calling a Sidebar from Any Template File
+
+**Why?** Instead of pasting the same sidebar HTML into `header.php`, `footer.php`, `page.php`, etc., you build it **once** and *pull it in* wherever it's needed — exactly like `get_header()` and `get_footer()` work.
+
+### Step 1 · Create `sidebar.php`
+
+Put all your sidebar markup here — widgets, recent posts, ads, whatever the sidebar should contain:
+
+```php
+<div class="sidebar">
+
+    <h3>Sidebar</h3>
+
+    <?php dynamic_sidebar('sidebar'); ?>
+
+</div>
+```
+
+### Step 2 · Call It Dynamically with `get_sidebar()`
+
+From any template file (`page.php`, `single.php`, `footer.php`, etc.), simply write:
+
+```php
+<?php get_sidebar(); ?>
+```
+
+WordPress automatically looks for `sidebar.php` and includes it at that exact spot.
+
+**Example — using it inside `page.php`:**
+
+```php
+<?php get_header(); ?>
+
+<div class="content">
+    <h1><?php the_title(); ?></h1>
+    <?php the_content(); ?>
+</div>
+
+<?php get_sidebar(); ?>
+
+<?php get_footer(); ?>
+```
+
+### Step 3 · Creating Additional / Named Sidebars
+
+One sidebar isn't always enough — e.g. you might want a different sidebar for the blog vs. the shop page. Create a **new file** named:
+
+```
+sidebar-your-id-or-name.php
+```
+
+For example, `sidebar-shop.php`:
+
+```php
+<div class="sidebar sidebar-shop">
+
+    <h3>Shop Sidebar</h3>
+
+    <?php dynamic_sidebar('shop-sidebar'); ?>
+
+</div>
+```
+
+Then call this specific sidebar by passing its name/id into `get_sidebar()`:
+
+```php
+<?php get_sidebar('shop'); ?>
+```
+
+> 💡 **How it works:** `get_sidebar('shop')` tells WordPress to look for a file named `sidebar-shop.php` — the part after `sidebar-` is whatever string you pass as the argument.
+
+### Quick Reference
+
+| Function | Loads |
+|---|---|
+| `get_sidebar();` | `sidebar.php` (the default sidebar) |
+| `get_sidebar('shop');` | `sidebar-shop.php` (a named/custom sidebar) |
+| `get_sidebar('footer');` | `sidebar-footer.php` |
+
+> ✅ **Checkpoint:** `get_sidebar()` only *includes the file* — you still need `register_sidebar()` (Topic 12) done in `functions.php` for the widget area itself to appear in **Appearance → Widgets**.
+
+---
+
 ## 🗂 Final Theme File Structure
 
 ```text
@@ -734,6 +818,8 @@ mytheme/
 ├── single.php
 ├── template-contact.php
 ├── category.php
+├── sidebar.php
+├── sidebar-shop.php
 │
 └── images/
     ├── logo.png
@@ -770,6 +856,8 @@ mytheme/
 13. category.php
         ↓
 14. Custom Widget / Sidebar
+        ↓
+15. get_sidebar() in Templates
 ```
 
 ---
@@ -800,6 +888,7 @@ mytheme/
 | `comments_template()` | Load `comments.php` (comments + form) |
 | `register_sidebar()` | Register a custom widget area (in `functions.php`) |
 | `dynamic_sidebar()` | Output a registered widget area on the front end |
+| `get_sidebar()` | Include `sidebar.php` (or `sidebar-name.php` when passed an argument) |
 
 ---
 
