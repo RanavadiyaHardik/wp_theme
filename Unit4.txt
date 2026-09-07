@@ -637,8 +637,13 @@ TOPIC 12: HOW TO CREATE YOUR CUSTOM WIDGET OR SIDEBAR
         );
 
 2. use dynamic_sidebar('your sidebar id') function for your widgets in front side
-        
 
+==================================================
+TOPIC 13: HOW TO CALL SIDEBAR FROM DYNAMIC PAGE LIKE HEADER OR FOOTER 
+======================================================
+1. create a sidebar.php file and add all content of a sidebar in this file
+2. use get_sidebar(); function getting sidebar dynamically.
+3. if you want to create another side bar so create sidebar-your id or name.php file and use get_sidebar('your id or name'); function for calling our another sidebar 
 ==================================================
 IMPORTANT WORDPRESS TEMPLATE FILES
 ==================================
