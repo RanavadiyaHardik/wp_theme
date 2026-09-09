@@ -644,6 +644,28 @@ TOPIC 13: HOW TO CALL SIDEBAR FROM DYNAMIC PAGE LIKE HEADER OR FOOTER
 1. create a sidebar.php file and add all content of a sidebar in this file
 2. use get_sidebar(); function getting sidebar dynamically.
 3. if you want to create another side bar so create sidebar-your id or name.php file and use get_sidebar('your id or name'); function for calling our another sidebar 
+
+
+==================================================
+TOPIC 14: HOW TO MAKE THE TITLE DYNAMIC
+======================================================
+1. use wp_title() function for getting title of any wp page;
+2. use bloginfo('name') function for getting the website's title set from admin side;
+3. use bloginfo('description') function for getting the website's tagline set from admin side;
+
+
+==================================================
+TOPIC 14: HOW TO ADD BACKGROUND IMAGE IN WEBSITE
+======================================================
+1. use add_theme_support('custom-background'); function for getting the background option in the admin panel;
+2. use body_class(); function for showing background image to front side use this function in body tag;
+
+
+==================================================
+TOPIC 15: HOW TO 404 ERROR PAGE
+======================================================
+1. create a 404.php page and all 404 errors show this page's content
+
 ==================================================
 IMPORTANT WORDPRESS TEMPLATE FILES
 ==================================
