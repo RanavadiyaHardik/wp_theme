@@ -655,16 +655,26 @@ TOPIC 14: HOW TO MAKE THE TITLE DYNAMIC
 
 
 ==================================================
-TOPIC 14: HOW TO ADD BACKGROUND IMAGE IN WEBSITE
+TOPIC 15: HOW TO ADD BACKGROUND IMAGE IN WEBSITE
 ======================================================
 1. use add_theme_support('custom-background'); function for getting the background option in the admin panel;
 2. use body_class(); function for showing background image to front side use this function in body tag;
 
 
 ==================================================
-TOPIC 15: HOW TO 404 ERROR PAGE
+TOPIC 16: HOW TO 404 ERROR PAGE
 ======================================================
 1. create a 404.php page and all 404 errors show this page's content
+
+==================================================
+TOPIC 17: HOW TO SHOW CATEGORIES IN YOUR PAGE
+==================================================
+1. use get_categories() function for getting all categories from WordPress;
+2. use foreach() loop for displaying all categories one by one;
+3. use $category->name for getting the category name;
+4. use $category->term_id for getting the category ID;
+5. use get_category_link($category->term_id) function for getting the category URL;
+
 
 ==================================================
 IMPORTANT WORDPRESS TEMPLATE FILES
