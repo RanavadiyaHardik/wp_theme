@@ -10,24 +10,30 @@ A step-by-step guide to building a custom WordPress theme from scratch — dynam
 
 | # | Topic |
 |---|---|
-| 1 | [Creating a Custom Theme](#-topic-1--creating-a-custom-theme) |
-| 2 | [Making the Header Menu Dynamic](#-topic-2--making-the-header-menu-dynamic) |
-| 3 | [Creating a Custom Page Layout](#-topic-3--creating-a-custom-page-layout) |
-| 4 | [Adding a Featured Image](#-topic-4--adding-a-featured-image) |
-| 5 | [Adding a Logo / Header Image](#-topic-5--adding-a-logo--header-image) |
-| 6 | [Creating a Custom Page Template](#-topic-6--creating-a-custom-page-template) |
-| 7 | [Showing Posts on the Front Side (The Loop)](#-topic-7--showing-posts-on-the-front-side-the-loop) |
-| 8 | [Adding Pagination to the Blog](#-topic-8--adding-pagination-to-the-blog) |
-| 9 | [Showing Single Post Details](#-topic-9--showing-single-post-details) |
-| 10 | [Comment Form on Blog Detail Page](#-topic-10--comment-form-on-blog-detail-page) |
-| 11 | [Showing Posts by Category](#-topic-11--showing-posts-by-category) |
-| 12 | [Creating a Custom Widget / Sidebar](#-topic-12--creating-a-custom-widget--sidebar) |
-| 13 | [Calling a Sidebar from Any Template File](#-topic-13--calling-a-sidebar-from-any-template-file) |
-| 14 | [Final Theme File Structure](#-final-theme-file-structure) |
-| 15 | [Quick Revision Table](#-quick-revision-table-all-important-functions) |
-| 16 | [Practical Task](#-practical-task-college-website-theme) |
+| 1 | [Creating a Custom Theme](#topic-1) |
+| 2 | [Making the Header Menu Dynamic](#topic-2) |
+| 3 | [Creating a Custom Page Layout](#topic-3) |
+| 4 | [Adding a Featured Image](#topic-4) |
+| 5 | [Adding a Logo / Header Image](#topic-5) |
+| 6 | [Creating a Custom Page Template](#topic-6) |
+| 7 | [Showing Posts on the Front Side (The Loop)](#topic-7) |
+| 8 | [Adding Pagination to the Blog](#topic-8) |
+| 9 | [Showing Single Post Details](#topic-9) |
+| 10 | [Comment Form on Blog Detail Page](#topic-10) |
+| 11 | [Showing Posts by Category](#topic-11) |
+| 12 | [Creating a Custom Widget / Sidebar](#topic-12) |
+| 13 | [Calling a Sidebar from Any Template File](#topic-13) |
+| 14 | [Making the Title Dynamic](#topic-14) |
+| 15 | [Adding a Background Image](#topic-15) |
+| 16 | [Creating a 404 Error Page](#topic-16) |
+| 17 | [Showing Categories in a Page](#topic-17) |
+| 18 | [Final Theme File Structure](#final-structure) |
+| 19 | [Quick Revision Table](#revision-table) |
+| 20 | [Practical Task](#practical-task) |
 
 ---
+
+<a id="topic-1"></a>
 
 ## 🧩 Topic 1 — Creating a Custom Theme
 
@@ -150,6 +156,8 @@ Includes `header.php`, `footer.php`, and `sidebar.php` respectively — this is 
 
 ---
 
+<a id="topic-2"></a>
+
 ## 🧭 Topic 2 — Making the Header Menu Dynamic
 
 **Why?** A hardcoded menu means editing PHP every time a page changes. A *dynamic* menu lets the site admin manage it from the dashboard — no code required.
@@ -221,6 +229,8 @@ Style it with plain CSS:
 
 ---
 
+<a id="topic-3"></a>
+
 ## 📄 Topic 3 — Creating a Custom Page Layout
 
 WordPress uses `page.php` as the default template for **static pages** (About Us, Contact, etc.) — separate from blog posts.
@@ -262,6 +272,8 @@ WordPress uses `page.php` as the default template for **static pages** (About Us
 | `get_footer()` | Includes `footer.php` |
 
 ---
+
+<a id="topic-4"></a>
 
 ## 🖼️ Topic 4 — Adding a Featured Image
 
@@ -318,6 +330,8 @@ echo $image[0];
 
 ---
 
+<a id="topic-5"></a>
+
 ## 🏷️ Topic 5 — Adding a Logo / Header Image
 
 ### Step 1 · Enable Custom Header Support
@@ -336,6 +350,8 @@ add_theme_support('custom-header');
 > 💡 **Modern alternative:** for a site *logo* specifically (as opposed to a header banner), `add_theme_support('custom-logo')` + `the_custom_logo()` is the more common, more flexible approach in current theme development.
 
 ---
+
+<a id="topic-6"></a>
 
 ## 🧱 Topic 6 — Creating a Custom Page Template
 
@@ -380,6 +396,8 @@ get_header();
 > **WordPress Admin → Pages → Add/Edit Page → Template dropdown → "Contact Us"**
 
 ---
+
+<a id="topic-7"></a>
 
 ## 🔄 Topic 7 — Showing Posts on the Front Side (The Loop)
 
@@ -433,6 +451,8 @@ while (have_posts()) {
 | `the_permalink()` | URL of the post |
 
 ---
+
+<a id="topic-8"></a>
 
 ## 📑 Topic 8 — Adding Pagination to the Blog
 
@@ -493,6 +513,8 @@ while (have_posts()) {
 
 ---
 
+<a id="topic-9"></a>
+
 ## 📰 Topic 9 — Showing Single Post Details
 
 When a user clicks a post, WordPress needs a dedicated template to show the full article.
@@ -543,6 +565,8 @@ Add this in your blog listing (Topic 7) so each post card links to its full `sin
 `the_permalink()` provides the post's URL — clicking it automatically loads `single.php`.
 
 ---
+
+<a id="topic-10"></a>
 
 ## 💬 Topic 10 — Comment Form on Blog Detail Page
 
@@ -647,6 +671,8 @@ comment_form();
 
 ---
 
+<a id="topic-11"></a>
+
 ## 🏷️ Topic 11 — Showing Posts by Category
 
 **Why?** By default, WordPress uses `index.php` (or `home.php`) to show *all* posts mixed together. A `category.php` template lets you display posts filtered by whichever category the visitor is browsing.
@@ -681,6 +707,8 @@ while (have_posts()) {
 > ✅ **Checkpoint:** If `category.php` doesn't exist, WordPress falls back to `archive.php`, then to `index.php`. Creating `category.php` is only needed when you want a layout **different** from the rest of the site.
 
 ---
+
+<a id="topic-12"></a>
 
 ## 🧰 Topic 12 — Creating Your Custom Widget / Sidebar
 
@@ -719,6 +747,8 @@ Use `dynamic_sidebar('your sidebar id')` wherever you want the widgets to appear
 > ✅ **Checkpoint:** The string passed to `dynamic_sidebar()` must **exactly match** the `id` used in `register_sidebar()` — same rule as the menu `theme_location` mismatch bug from Topic 2.
 
 ---
+
+<a id="topic-13"></a>
 
 ## 🔌 Topic 13 — Calling a Sidebar from Any Template File
 
@@ -803,6 +833,213 @@ Then call this specific sidebar by passing its name/id into `get_sidebar()`:
 
 ---
 
+<a id="topic-14"></a>
+
+## 🔤 Topic 14 — Making the Title Dynamic
+
+**Why?** A hardcoded `<title>My Website</title>` never changes no matter what page a visitor is on — bad for SEO and bad for usability. WordPress gives you functions that build the title (and site name/tagline) dynamically from the admin settings and the current page.
+
+### 1. `wp_title()` — Title of the Current Page
+
+Returns/echoes the title of whichever page is currently being viewed (post title, page title, category name, etc.).
+
+```php
+<title><?php wp_title(); ?></title>
+```
+
+### 2. `bloginfo('name')` — Website Title
+
+Outputs the site title exactly as set in **Settings → General → Site Title**.
+
+```php
+<h1><?php bloginfo('name'); ?></h1>
+```
+
+### 3. `bloginfo('description')` — Website Tagline
+
+Outputs the site's tagline, set in **Settings → General → Tagline**.
+
+```php
+<p><?php bloginfo('description'); ?></p>
+```
+
+### Putting It All Together
+
+```php
+<head>
+    <title><?php wp_title(); ?> | <?php bloginfo('name'); ?></title>
+</head>
+
+<body>
+
+    <header>
+        <h1><?php bloginfo('name'); ?></h1>
+        <p><?php bloginfo('description'); ?></p>
+    </header>
+
+</body>
+```
+
+> 💡 **Where these come from:** `bloginfo('name')` and `bloginfo('description')` both pull directly from **Settings → General** in the WordPress Admin — change them there and every page updates automatically, with no code edits.
+
+---
+
+<a id="topic-15"></a>
+
+## 🖼️ Topic 15 — Adding a Background Image
+
+**Why?** Instead of hardcoding a background image in CSS, WordPress can let the site admin **upload and change the background** themselves from the dashboard.
+
+### Step 1 · Enable Support in `functions.php`
+
+```php
+<?php
+add_theme_support('custom-background');
+```
+
+This adds a new **Appearance → Background** option in the admin panel, where the admin can upload an image, pick a color, and set repeat/position.
+
+### Step 2 · Output It with `body_class()`
+
+Add `body_class()` inside the `<body>` tag — WordPress uses it to automatically attach the right CSS classes (including the custom background) to the page:
+
+```php
+<body <?php body_class(); ?>>
+
+    <!-- Website Content -->
+
+</body>
+```
+
+> 💡 `body_class()` doesn't just handle the background — it also adds useful context classes like `page`, `home`, `single-post`, `logged-in`, etc., which are handy for page-specific CSS styling.
+
+> ✅ **Checkpoint:** If the background image doesn't show up on the front end after uploading it in **Appearance → Background**, double-check that `body_class()` is actually present in the `<body>` tag — this is the #1 reason the feature silently doesn't work.
+
+---
+
+<a id="topic-16"></a>
+
+## 🚫 Topic 16 — Creating a 404 Error Page
+
+**Why?** When a visitor hits a broken/missing link, WordPress needs a friendly page to show instead of a blank error — this is fully customizable per theme.
+
+### Step 1 · Create `404.php`
+
+Any time WordPress can't find a matching page, post, or template for a URL, it automatically loads `404.php` and shows its content.
+
+### Step 2 · Build the Content
+
+```php
+<?php get_header(); ?>
+
+<div class="error-404">
+
+    <h1>404 — Page Not Found</h1>
+
+    <p>Sorry, the page you're looking for doesn't exist or has been moved.</p>
+
+    <a href="<?php echo site_url(); ?>">← Back to Home</a>
+
+</div>
+
+<?php get_footer(); ?>
+```
+
+> ✅ **Checkpoint:** No extra registration or function call is needed for `404.php` — WordPress's built-in **Template Hierarchy** automatically detects a missing page/post and loads this file if it exists in your theme folder.
+
+---
+
+<a id="topic-17"></a>
+
+## 🗃️ Topic 17 — Showing Categories in a Page
+
+**Why?** Sometimes you want to list **all categories** somewhere on the site — e.g. a "Browse by Category" widget, a footer menu, or a category grid on the homepage — without hardcoding each one.
+
+### Step 1 · Get All Categories with `get_categories()`
+
+```php
+<?php
+$categories = get_categories();
+?>
+```
+
+This returns an **array of category objects** — each one representing a single category and its data (name, ID, slug, count, etc.).
+
+### Step 2 · Loop Through Them with `foreach()`
+
+```php
+<?php
+foreach ($categories as $category) {
+    // display each category here
+}
+?>
+```
+
+### Step 3 · Get the Category Name — `$category->name`
+
+```php
+<?php echo $category->name; ?>
+```
+
+### Step 4 · Get the Category ID — `$category->term_id`
+
+```php
+<?php echo $category->term_id; ?>
+```
+
+### Step 5 · Get the Category URL — `get_category_link($category->term_id)`
+
+```php
+<?php echo get_category_link($category->term_id); ?>
+```
+
+### Full Working Example
+
+```php
+<ul class="category-list">
+    <?php
+    $categories = get_categories();
+
+    foreach ($categories as $category) {
+    ?>
+        <li>
+            <a href="<?php echo get_category_link($category->term_id); ?>">
+                <?php echo $category->name; ?>
+            </a>
+        </li>
+    <?php
+    }
+    ?>
+</ul>
+```
+
+This outputs something like:
+
+```html
+<ul class="category-list">
+    <li><a href="https://example.com/category/news/">News</a></li>
+    <li><a href="https://example.com/category/events/">Events</a></li>
+    <li><a href="https://example.com/category/sports/">Sports</a></li>
+</ul>
+```
+
+### Function / Property Reference
+
+| Item | Purpose |
+|---|---|
+| `get_categories()` | Returns an array of all category objects |
+| `$category->name` | The category's display name |
+| `$category->term_id` | The category's unique numeric ID |
+| `get_category_link($id)` | Returns the URL of that category's archive page |
+
+> 💡 **Where this is used:** Drop this snippet into `sidebar.php` for a "Browse by Category" widget, into `footer.php` for a category footer menu, or into `page.php`/`index.php` for a category grid on the homepage.
+
+> ✅ **Checkpoint:** Clicking any link from this loop takes the visitor to that category's archive — which is exactly the page rendered by `category.php` from **Topic 11**. The two topics work together: this lists the categories, `category.php` displays the posts inside each one.
+
+---
+
+<a id="final-structure"></a>
+
 ## 🗂 Final Theme File Structure
 
 ```text
@@ -813,13 +1050,13 @@ mytheme/
 ├── header.php
 ├── footer.php
 ├── functions.php
-├── sidebar.php
 ├── page.php
 ├── single.php
 ├── template-contact.php
 ├── category.php
 ├── sidebar.php
 ├── sidebar-shop.php
+├── 404.php
 │
 └── images/
     ├── logo.png
@@ -858,9 +1095,19 @@ mytheme/
 14. Custom Widget / Sidebar
         ↓
 15. get_sidebar() in Templates
+        ↓
+16. Dynamic Title
+        ↓
+17. Background Image
+        ↓
+18. 404.php
+        ↓
+19. List Categories
 ```
 
 ---
+
+<a id="revision-table"></a>
 
 ## 📋 Quick Revision Table (All Important Functions)
 
@@ -889,8 +1136,16 @@ mytheme/
 | `register_sidebar()` | Register a custom widget area (in `functions.php`) |
 | `dynamic_sidebar()` | Output a registered widget area on the front end |
 | `get_sidebar()` | Include `sidebar.php` (or `sidebar-name.php` when passed an argument) |
+| `wp_title()` | Display the title of the current page/post |
+| `bloginfo('name')` | Display the site title (from Settings → General) |
+| `bloginfo('description')` | Display the site tagline (from Settings → General) |
+| `body_class()` | Add dynamic CSS classes (incl. custom background) to `<body>` |
+| `get_categories()` | Get an array of all category objects |
+| `get_category_link($id)` | Get the URL of a category's archive page |
 
 ---
+
+<a id="practical-task"></a>
 
 ## 🎯 Practical Task: College Website Theme
 
@@ -911,6 +1166,10 @@ Build a **College Website Custom WordPress Theme** with:
 - [ ] Contact Us Custom Template
 - [ ] Category-wise Blog Filtering
 - [ ] Custom Widget / Sidebar Area
+- [ ] Dynamic Site Title & Tagline
+- [ ] Custom Background Image
+- [ ] Custom 404 Error Page
+- [ ] Category List / Browse by Category
 - [ ] Header and Footer
 - [ ] Proper CSS Design
 
@@ -926,6 +1185,8 @@ page.php
 single.php
 template-contact.php
 category.php
+sidebar.php
+404.php
 ```
 
 > 🎯 **Goal:** Every part of the site — menu, pages, blog, contact form template — should be manageable from the **WordPress Admin Panel**, with no code edits needed for routine content changes.
