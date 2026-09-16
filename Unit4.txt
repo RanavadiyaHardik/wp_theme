@@ -675,6 +675,11 @@ TOPIC 17: HOW TO SHOW CATEGORIES IN YOUR PAGE
 4. use $category->term_id for getting the category ID;
 5. use get_category_link($category->term_id) function for getting the category URL;
 
+==================================================
+TOPIC 18: HOW TO ADD CUSTOM POST TYPE
+==================================================
+1. install custom post type plugin for getting custom post in admin side;
+2. use Wp_Query() function for showing custom post type posts in front side;
 
 ==================================================
 IMPORTANT WORDPRESS TEMPLATE FILES
