@@ -27,9 +27,10 @@ A step-by-step guide to building a custom WordPress theme from scratch — dynam
 | 15 | [Adding a Background Image](#topic-15) |
 | 16 | [Creating a 404 Error Page](#topic-16) |
 | 17 | [Showing Categories in a Page](#topic-17) |
-| 18 | [Final Theme File Structure](#final-structure) |
-| 19 | [Quick Revision Table](#revision-table) |
-| 20 | [Practical Task](#practical-task) |
+| 18 | [Adding a Custom Post Type](#topic-18) |
+| 19 | [Final Theme File Structure](#final-structure) |
+| 20 | [Quick Revision Table](#revision-table) |
+| 21 | [Practical Task](#practical-task) |
 
 ---
 
@@ -1038,6 +1039,114 @@ This outputs something like:
 
 ---
 
+<a id="topic-18"></a>
+
+## 🧩 Topic 18 — How to Add a Custom Post Type
+
+**Why?** Sometimes "Posts" and "Pages" aren't enough — e.g. a college site needs "Faculty," "Courses," or "Events" as their own content type, each manageable separately from the admin panel.
+
+### Step 1 · Install a Custom Post Type Plugin
+
+The easiest way to get a Custom Post Type (CPT) option in the admin side is via a plugin:
+
+> **Plugins → Add New → search "Custom Post Type UI" → Install & Activate**
+
+Once activated, you'll find a new **CPT UI** menu in the admin sidebar where you can create a post type (e.g. `faculty`) just by filling a form — no code required for the registration step itself.
+
+> 💡 **Alternative (code-based):** advanced users can register a CPT manually in `functions.php` with `register_post_type()`, but the plugin route is faster and matches what this topic is teaching.
+
+### Step 2 · Show Custom Post Type Posts on the Front Side with `WP_Query()`
+
+Once your custom post type exists (with some entries added, e.g. under "Faculty" in the admin), use `WP_Query()` to pull those posts into any template file — `page.php`, `index.php`, a custom template, wherever you need them.
+
+```php
+<?php
+$faculty_query = new WP_Query(
+    array(
+        'post_type'      => 'faculty',
+        'posts_per_page' => 10
+    )
+);
+?>
+```
+
+### Step 3 · Loop Through the Results
+
+`WP_Query()` gives you its own mini-Loop — same idea as the default Loop from Topic 7, but scoped to just this query:
+
+```php
+<?php
+if ($faculty_query->have_posts()) {
+    while ($faculty_query->have_posts()) {
+        $faculty_query->the_post();
+?>
+
+        <h2><?php the_title(); ?></h2>
+
+        <?php the_post_thumbnail('medium'); ?>
+
+        <p><?php the_excerpt(); ?></p>
+
+<?php
+    }
+}
+?>
+```
+
+### Step 4 · Reset Post Data
+
+Always call `wp_reset_postdata()` after a custom `WP_Query()` loop — this restores WordPress's main post data so the rest of the page (or the default Loop) doesn't get confused about which post is "current."
+
+```php
+<?php wp_reset_postdata(); ?>
+```
+
+### Full Working Example
+
+```php
+<div class="faculty-list">
+
+    <?php
+    $faculty_query = new WP_Query(
+        array(
+            'post_type'      => 'faculty',
+            'posts_per_page' => 10
+        )
+    );
+
+    if ($faculty_query->have_posts()) {
+        while ($faculty_query->have_posts()) {
+            $faculty_query->the_post();
+    ?>
+            <div class="faculty-card">
+                <h2><?php the_title(); ?></h2>
+                <?php the_post_thumbnail('medium'); ?>
+                <p><?php the_excerpt(); ?></p>
+            </div>
+    <?php
+        }
+        wp_reset_postdata();
+    }
+    ?>
+
+</div>
+```
+
+### Function / Argument Reference
+
+| Item | Purpose |
+|---|---|
+| Custom Post Type UI (plugin) | Lets the admin create custom post types (e.g. `faculty`, `courses`) from the dashboard |
+| `new WP_Query(array(...))` | Runs a custom query — here, fetching posts of a specific `post_type` |
+| `'post_type'` | Argument that tells `WP_Query()` which post type to fetch |
+| `'posts_per_page'` | Argument that limits how many results are returned |
+| `have_posts()` / `the_post()` | Same Loop functions from Topic 7, called on the `$faculty_query` object instead of the main query |
+| `wp_reset_postdata()` | Restores the global post data after a custom `WP_Query()` loop |
+
+> ✅ **Checkpoint:** Forgetting `wp_reset_postdata()` is the #1 bug with custom `WP_Query()` loops — without it, functions like `the_title()` used *after* this block may show data from the wrong post.
+
+---
+
 <a id="final-structure"></a>
 
 ## 🗂 Final Theme File Structure
@@ -1103,6 +1212,8 @@ mytheme/
 18. 404.php
         ↓
 19. List Categories
+        ↓
+20. Custom Post Type + WP_Query
 ```
 
 ---
@@ -1142,6 +1253,8 @@ mytheme/
 | `body_class()` | Add dynamic CSS classes (incl. custom background) to `<body>` |
 | `get_categories()` | Get an array of all category objects |
 | `get_category_link($id)` | Get the URL of a category's archive page |
+| `new WP_Query(array(...))` | Run a custom query (e.g. fetch posts of a custom post type) |
+| `wp_reset_postdata()` | Restore global post data after a custom `WP_Query()` loop |
 
 ---
 
@@ -1170,6 +1283,7 @@ Build a **College Website Custom WordPress Theme** with:
 - [ ] Custom Background Image
 - [ ] Custom 404 Error Page
 - [ ] Category List / Browse by Category
+- [ ] Custom Post Type (e.g. Faculty) with `WP_Query`
 - [ ] Header and Footer
 - [ ] Proper CSS Design
 
