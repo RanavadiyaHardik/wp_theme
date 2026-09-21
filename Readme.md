@@ -28,9 +28,10 @@ A step-by-step guide to building a custom WordPress theme from scratch — dynam
 | 16 | [Creating a 404 Error Page](#topic-16) |
 | 17 | [Showing Categories in a Page](#topic-17) |
 | 18 | [Adding a Custom Post Type](#topic-18) |
-| 19 | [Final Theme File Structure](#final-structure) |
-| 20 | [Quick Revision Table](#revision-table) |
-| 21 | [Practical Task](#practical-task) |
+| 19 | [Adding a Custom Taxonomy or Category](#topic-19) |
+| 20 | [Final Theme File Structure](#final-structure) |
+| 21 | [Quick Revision Table](#revision-table) |
+| 22 | [Practical Task](#practical-task) |
 
 ---
 
@@ -1147,6 +1148,92 @@ Always call `wp_reset_postdata()` after a custom `WP_Query()` loop — this rest
 
 ---
 
+<a id="topic-19"></a>
+
+## 🏷️ Topic 19 — How to Add a Custom Taxonomy or Category
+
+**Why?** A Custom Post Type (Topic 18) often needs its *own* categorization system — e.g. "Faculty" posts grouped by **Department**, or "Courses" grouped by **Subject** — separate from the default Posts categories.
+
+### Step 1 · Add the Taxonomy from a Plugin
+
+The same **Custom Post Type UI** plugin used in Topic 18 also lets you create custom taxonomies from the admin panel:
+
+> **CPT UI → Add/Edit Taxonomies** → give it a name and slug (e.g. `department`) → attach it to your custom post type (e.g. `faculty`) → Save
+
+Once saved, a new taxonomy box appears on the edit screen for that post type — just like the default "Category" box for regular Posts.
+
+### Step 2 · Fetch the Taxonomy Terms with `get_terms()`
+
+To display these custom categories on the front end, use `get_terms()` and pass your taxonomy's slug:
+
+```php
+<?php
+$categories = get_terms(
+    array(
+        'taxonomy' => 'department'
+    )
+);
+?>
+```
+
+> 💡 By default, `get_terms()` only returns terms that have **at least one post** assigned to them.
+
+### Step 3 · Show Empty Terms Too (Optional)
+
+If you also want terms with **zero posts** to appear (e.g. a newly created department with no faculty added yet), add `'hide_empty' => false`:
+
+```php
+<?php
+$categories = get_terms(
+    array(
+        'taxonomy'   => 'department',
+        'hide_empty' => false
+    )
+);
+?>
+```
+
+### Full Working Example
+
+```php
+<?php
+$categories = get_terms(array(
+    'taxonomy'   => 'department',
+    'hide_empty' => false
+));
+
+if (!empty($categories) && !is_wp_error($categories)) {
+    foreach ($categories as $category) {
+        echo '<h3>' . esc_html($category->name) . '</h3>';
+    }
+}
+?>
+```
+
+This outputs something like:
+
+```html
+<h3>Computer Science</h3>
+<h3>Commerce</h3>
+<h3>Science</h3>
+```
+
+### Function / Argument Reference
+
+| Item | Purpose |
+|---|---|
+| `get_terms(array(...))` | Fetches terms (categories) belonging to a specific taxonomy |
+| `'taxonomy'` | Argument specifying which taxonomy's terms to fetch (e.g. `department`) |
+| `'hide_empty'` | `true` (default) shows only terms with posts; `false` shows all terms, even empty ones |
+| `is_wp_error($categories)` | Checks whether `get_terms()` returned an error instead of results |
+| `esc_html()` | Safely escapes text before output — good practice whenever printing dynamic content |
+
+> ✅ **Checkpoint:** Always check `!empty($categories) && !is_wp_error($categories)` before looping — `get_terms()` returns a `WP_Error` object (not an empty array) if the taxonomy slug is misspelled, so skipping this check can throw a PHP warning instead of failing silently.
+
+> 💡 **How this connects:** Topic 17 (`get_categories()`) fetches terms from the default **category** taxonomy only. `get_terms()` is the more general version — it can fetch terms from *any* taxonomy, default or custom, which is exactly what a Custom Post Type from Topic 18 needs.
+
+---
+
 <a id="final-structure"></a>
 
 ## 🗂 Final Theme File Structure
@@ -1214,6 +1301,8 @@ mytheme/
 19. List Categories
         ↓
 20. Custom Post Type + WP_Query
+        ↓
+21. Custom Taxonomy + get_terms()
 ```
 
 ---
@@ -1255,6 +1344,8 @@ mytheme/
 | `get_category_link($id)` | Get the URL of a category's archive page |
 | `new WP_Query(array(...))` | Run a custom query (e.g. fetch posts of a custom post type) |
 | `wp_reset_postdata()` | Restore global post data after a custom `WP_Query()` loop |
+| `get_terms(array(...))` | Fetch terms from any taxonomy, default or custom |
+| `is_wp_error()` | Check whether a WordPress function returned an error object |
 
 ---
 
@@ -1284,6 +1375,7 @@ Build a **College Website Custom WordPress Theme** with:
 - [ ] Custom 404 Error Page
 - [ ] Category List / Browse by Category
 - [ ] Custom Post Type (e.g. Faculty) with `WP_Query`
+- [ ] Custom Taxonomy (e.g. Department) with `get_terms()`
 - [ ] Header and Footer
 - [ ] Proper CSS Design
 
