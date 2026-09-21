@@ -682,6 +682,25 @@ TOPIC 18: HOW TO ADD CUSTOM POST TYPE
 2. use Wp_Query() function for showing custom post type posts in front side;
 
 ==================================================
+TOPIC 19: HOW TO ADD CUSTOM TAXONOMY OR CATEGORY
+==================================================
+1. Add category from installed plugin;
+2. use get_terms(['taxonomy'=>'your_category_slug']) function for showing categories in front side 
+3. if you want to show empty category get_terms(['taxonomy'=>'your_category_slug','hide_empty'=>false]) for showing all categories;
+    ex. <?php
+            $categories = get_terms([
+                'taxonomy'   => 'your_category_slug',
+                'hide_empty' => false
+            ]);
+            
+            if (!empty($categories) && !is_wp_error($categories)) {
+                foreach ($categories as $category) {
+                    echo '<h3>' . esc_html($category->name) . '</h3>';
+                }
+            }
+        ?>
+
+==================================================
 IMPORTANT WORDPRESS TEMPLATE FILES
 ==================================
 
