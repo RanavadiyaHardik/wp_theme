@@ -701,6 +701,66 @@ TOPIC 19: HOW TO ADD CUSTOM TAXONOMY OR CATEGORY
         ?>
 
 ==================================================
+TOPIC 20: HOW TO UPLOAD AND SHOW CATEGORY IMAGE
+==================================================
+1. Install Category and Taxonomy Image Plugin for getting option in the settings->taxonomy image;
+2. use $your_variable = get_wp_term_image(term_id); function for getting the path of image use this function in the foreach loop also;
+
+==================================================
+TOPIC 21: HOW TO CREATE CUSTOM CATEGORY TEMPLATE
+==================================================
+
+1. Create a new template file in your WordPress theme.
+
+2. For a custom taxonomy, create the template file using the following naming format:
+
+   taxonomy-your_category_slug.php
+
+   Example:
+   taxonomy-product_category.php
+
+3. WordPress automatically uses this file to display the archive/listing
+   page of the custom taxonomy.
+
+4. Use get_queried_object() function to get the current category/taxonomy
+   information.
+
+5. Use $category->name to display the category name.
+
+6. Use $category->description to display the category description.
+
+7. Use WP_Query or the WordPress Loop to show posts/products belonging
+   to the current category.
+
+    ex. <?php
+
+        $category = get_queried_object();
+
+        ?>
+
+        <h1><?php echo esc_html($category->name); ?></h1>
+
+        <p><?php echo esc_html($category->description); ?></p>
+
+        <?php
+        if (have_posts()) {
+
+            while (have_posts()) {
+                the_post();
+                ?>
+
+                <h2><?php the_title(); ?></h2>
+
+                <?php
+            }
+
+        } else {
+            echo '<p>No posts found.</p>';
+        }
+        ?>
+
+
+==================================================
 IMPORTANT WORDPRESS TEMPLATE FILES
 ==================================
 
