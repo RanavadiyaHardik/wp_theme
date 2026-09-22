@@ -29,9 +29,11 @@ A step-by-step guide to building a custom WordPress theme from scratch — dynam
 | 17 | [Showing Categories in a Page](#topic-17) |
 | 18 | [Adding a Custom Post Type](#topic-18) |
 | 19 | [Adding a Custom Taxonomy or Category](#topic-19) |
-| 20 | [Final Theme File Structure](#final-structure) |
-| 21 | [Quick Revision Table](#revision-table) |
-| 22 | [Practical Task](#practical-task) |
+| 20 | [Uploading and Showing a Category Image](#topic-20) |
+| 21 | [Creating a Custom Category Template](#topic-21) |
+| 22 | [Final Theme File Structure](#final-structure) |
+| 23 | [Quick Revision Table](#revision-table) |
+| 24 | [Practical Task](#practical-task) |
 
 ---
 
@@ -1193,13 +1195,40 @@ $categories = get_terms(
 ?>
 ```
 
+### Step 4 · Sort and Limit the Results
+
+`get_terms()` also accepts `orderby`, `order`, and `number` to control how many terms come back and in what sequence:
+
+```php
+<?php
+$categories = get_terms(
+    array(
+        'taxonomy'   => 'department',
+        'hide_empty' => false,
+        'orderby'    => 'name',
+        'order'      => 'ASC',
+        'number'     => 5
+    )
+);
+?>
+```
+
+| Argument | Purpose |
+|---|---|
+| `'orderby'` | Field to sort by — common values: `name`, `count`, `term_id`, `slug` |
+| `'order'` | Sort direction — `ASC` (A→Z / low→high) or `DESC` (Z→A / high→low) |
+| `'number'` | Maximum number of terms to return (acts as a limit) — `0` returns all |
+
 ### Full Working Example
 
 ```php
 <?php
 $categories = get_terms(array(
     'taxonomy'   => 'department',
-    'hide_empty' => false
+    'hide_empty' => false,
+    'orderby'    => 'name',
+    'order'      => 'ASC',
+    'number'     => 5
 ));
 
 if (!empty($categories) && !is_wp_error($categories)) {
@@ -1213,8 +1242,8 @@ if (!empty($categories) && !is_wp_error($categories)) {
 This outputs something like:
 
 ```html
-<h3>Computer Science</h3>
 <h3>Commerce</h3>
+<h3>Computer Science</h3>
 <h3>Science</h3>
 ```
 
@@ -1225,12 +1254,232 @@ This outputs something like:
 | `get_terms(array(...))` | Fetches terms (categories) belonging to a specific taxonomy |
 | `'taxonomy'` | Argument specifying which taxonomy's terms to fetch (e.g. `department`) |
 | `'hide_empty'` | `true` (default) shows only terms with posts; `false` shows all terms, even empty ones |
+| `'orderby'` | Field to sort results by — e.g. `name`, `count`, `term_id` |
+| `'order'` | Sort direction — `ASC` or `DESC` |
+| `'number'` | Limits how many terms are returned |
 | `is_wp_error($categories)` | Checks whether `get_terms()` returned an error instead of results |
 | `esc_html()` | Safely escapes text before output — good practice whenever printing dynamic content |
 
 > ✅ **Checkpoint:** Always check `!empty($categories) && !is_wp_error($categories)` before looping — `get_terms()` returns a `WP_Error` object (not an empty array) if the taxonomy slug is misspelled, so skipping this check can throw a PHP warning instead of failing silently.
 
 > 💡 **How this connects:** Topic 17 (`get_categories()`) fetches terms from the default **category** taxonomy only. `get_terms()` is the more general version — it can fetch terms from *any* taxonomy, default or custom, which is exactly what a Custom Post Type from Topic 18 needs.
+
+---
+
+<a id="topic-20"></a>
+
+## 🖼️ Topic 20 — How to Upload and Show a Category Image
+
+**Why?** By default, WordPress categories and custom taxonomy terms only have a name and description — no image field. A plugin adds that missing image option, which is great for things like a visual "Browse by Department" or "Browse by Category" grid.
+
+### Step 1 · Install a Category/Taxonomy Image Plugin
+
+```
+Plugins → Add New → search "Categories Images" (or "Taxonomy Images") → Install & Activate
+```
+
+Once activated, a new **image upload field** appears wherever you edit a category or taxonomy term — under **Settings → Taxonomy Image**, or directly on each term's edit screen, depending on the plugin.
+
+### Step 2 · Get the Image Path with `get_wp_term_image()`
+
+The plugin gives you a helper function to fetch the uploaded image's path/URL for any given term, by passing its `term_id`:
+
+```php
+<?php
+$image_url = get_wp_term_image($category->term_id);
+?>
+```
+
+### Step 3 · Use It Inside a `foreach` Loop
+
+This is most useful combined with the `get_terms()` loop from **Topic 19** — fetch all terms, then pull each one's image alongside its name:
+
+```php
+<?php
+foreach ($categories as $category) {
+    $image_url = get_wp_term_image($category->term_id);
+?>
+    <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($category->name); ?>">
+<?php
+}
+?>
+```
+
+### Full Working Example
+
+```php
+<div class="category-grid">
+
+    <?php
+    $categories = get_terms(array(
+        'taxonomy'   => 'department',
+        'hide_empty' => false
+    ));
+
+    if (!empty($categories) && !is_wp_error($categories)) {
+        foreach ($categories as $category) {
+            $image_url = get_wp_term_image($category->term_id);
+    ?>
+            <div class="category-card">
+                <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($category->name); ?>">
+                <h3><?php echo esc_html($category->name); ?></h3>
+            </div>
+    <?php
+        }
+    }
+    ?>
+
+</div>
+```
+
+This outputs something like:
+
+```html
+<div class="category-grid">
+    <div class="category-card">
+        <img src="https://example.com/wp-content/uploads/cs-icon.png" alt="Computer Science">
+        <h3>Computer Science</h3>
+    </div>
+    <div class="category-card">
+        <img src="https://example.com/wp-content/uploads/commerce-icon.png" alt="Commerce">
+        <h3>Commerce</h3>
+    </div>
+</div>
+```
+
+### Function / Argument Reference
+
+| Item | Purpose |
+|---|---|
+| Categories/Taxonomy Images (plugin) | Adds an image upload field to category and taxonomy term edit screens |
+| `get_wp_term_image($term_id)` | Returns the uploaded image's path/URL for the given term |
+| `esc_url()` | Safely escapes a URL before output — used for the `src` attribute |
+| `esc_attr()` | Safely escapes text before output inside an HTML attribute (e.g. `alt`) |
+
+> ✅ **Checkpoint:** If `get_wp_term_image()` returns empty for a term, double-check that an image was actually uploaded for that specific term in the admin panel — the function only returns a value once one has been set.
+
+> 💡 **How this connects:** This pairs directly with **Topic 19** — run `get_terms()` to get the list of categories/taxonomy terms, then use `get_wp_term_image()` inside the same `foreach` loop to pull each one's image.
+
+---
+
+<a id="topic-21"></a>
+
+## 🗃️ Topic 21 — How to Create a Custom Category Template
+
+**Why?** By default, WordPress uses a generic template (like `archive.php` or `index.php`) to display any category or taxonomy archive. A **custom category template** lets you give one specific taxonomy — say, `product_category` — its own unique layout.
+
+### Step 1 · Create a New Template File
+
+Add a new PHP file in your theme's root folder.
+
+### Step 2 · Name It Using WordPress's Naming Format
+
+For a custom taxonomy, the filename must follow this exact pattern:
+
+```
+taxonomy-your_category_slug.php
+```
+
+**Example** — for a taxonomy with the slug `product_category`:
+
+```
+taxonomy-product_category.php
+```
+
+### Step 3 · WordPress Loads It Automatically
+
+No registration or extra code is needed — WordPress's built-in **Template Hierarchy** automatically uses this file to display the archive/listing page for that taxonomy (e.g. `yoursite.com/product_category/electronics/`).
+
+### Step 4 · Get the Current Category Info with `get_queried_object()`
+
+Inside the template, `get_queried_object()` returns the category/term object currently being viewed:
+
+```php
+<?php
+$category = get_queried_object();
+?>
+```
+
+### Step 5 · Display the Category Name — `$category->name`
+
+```php
+<h1><?php echo esc_html($category->name); ?></h1>
+```
+
+### Step 6 · Display the Category Description — `$category->description`
+
+```php
+<p><?php echo esc_html($category->description); ?></p>
+```
+
+### Step 7 · Show Posts Belonging to This Category with The Loop
+
+Use the standard Loop (Topic 7) — WordPress automatically limits it to posts/products belonging to the currently queried category:
+
+```php
+<?php
+if (have_posts()) {
+    while (have_posts()) {
+        the_post();
+?>
+        <h2><?php the_title(); ?></h2>
+<?php
+    }
+} else {
+    echo '<p>No posts found.</p>';
+}
+?>
+```
+
+### Full Working Example — `taxonomy-product_category.php`
+
+```php
+<?php get_header(); ?>
+
+<?php
+$category = get_queried_object();
+?>
+
+<h1><?php echo esc_html($category->name); ?></h1>
+<p><?php echo esc_html($category->description); ?></p>
+
+<div class="category-posts">
+
+    <?php
+    if (have_posts()) {
+        while (have_posts()) {
+            the_post();
+    ?>
+            <div class="post-card">
+                <h2><?php the_title(); ?></h2>
+                <?php the_post_thumbnail('medium'); ?>
+                <p><?php the_excerpt(); ?></p>
+            </div>
+    <?php
+        }
+    } else {
+        echo '<p>No posts found.</p>';
+    }
+    ?>
+
+</div>
+
+<?php get_footer(); ?>
+```
+
+### Function / Concept Reference
+
+| Item | Purpose |
+|---|---|
+| `taxonomy-your_category_slug.php` | File naming pattern WordPress auto-loads for a custom taxonomy's archive page |
+| `get_queried_object()` | Returns the category/taxonomy term object currently being viewed |
+| `$category->name` | The current term's display name |
+| `$category->description` | The current term's description text (set in the admin panel) |
+| `have_posts()` / `the_post()` | The standard Loop, automatically scoped to the current taxonomy archive |
+
+> ✅ **Checkpoint:** The filename must match the taxonomy's **slug** exactly (not its label) — for a taxonomy registered with the slug `product_category`, the file must be named `taxonomy-product_category.php`, or WordPress will silently fall back to `archive.php`/`index.php` instead.
+
+> 💡 **How this connects:** This is the taxonomy equivalent of `category.php` from **Topic 11** (which only covers the *default* Post category). Use `taxonomy-slug.php` whenever the taxonomy is a **custom** one, like the `department` taxonomy from Topic 19.
 
 ---
 
@@ -1253,6 +1502,7 @@ mytheme/
 ├── sidebar.php
 ├── sidebar-shop.php
 ├── 404.php
+├── taxonomy-product_category.php
 │
 └── images/
     ├── logo.png
@@ -1303,6 +1553,10 @@ mytheme/
 20. Custom Post Type + WP_Query
         ↓
 21. Custom Taxonomy + get_terms()
+        ↓
+22. Category/Term Images
+        ↓
+23. Custom Taxonomy Template
 ```
 
 ---
@@ -1346,6 +1600,8 @@ mytheme/
 | `wp_reset_postdata()` | Restore global post data after a custom `WP_Query()` loop |
 | `get_terms(array(...))` | Fetch terms from any taxonomy, default or custom |
 | `is_wp_error()` | Check whether a WordPress function returned an error object |
+| `get_wp_term_image($term_id)` | Get the uploaded image path/URL for a category or taxonomy term |
+| `get_queried_object()` | Get the category/taxonomy term object for the current archive page |
 
 ---
 
@@ -1376,6 +1632,8 @@ Build a **College Website Custom WordPress Theme** with:
 - [ ] Category List / Browse by Category
 - [ ] Custom Post Type (e.g. Faculty) with `WP_Query`
 - [ ] Custom Taxonomy (e.g. Department) with `get_terms()`
+- [ ] Category/Department Images
+- [ ] Custom Taxonomy Archive Template
 - [ ] Header and Footer
 - [ ] Proper CSS Design
 
@@ -1393,6 +1651,7 @@ template-contact.php
 category.php
 sidebar.php
 404.php
+taxonomy-product_category.php
 ```
 
 > 🎯 **Goal:** Every part of the site — menu, pages, blog, contact form template — should be manageable from the **WordPress Admin Panel**, with no code edits needed for routine content changes.
